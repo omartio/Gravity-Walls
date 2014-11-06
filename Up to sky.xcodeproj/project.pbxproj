@@ -16,6 +16,14 @@
 		90D1560219FE7B1C000F78DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90D1560119FE7B1C000F78DE /* Images.xcassets */; };
 		90D1560519FE7B1C000F78DE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90D1560319FE7B1C000F78DE /* LaunchScreen.xib */; };
 		90D1561119FE7B1C000F78DE /* Up_to_skyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D1561019FE7B1C000F78DE /* Up_to_skyTests.m */; };
+		90D2A4D41A080BDF0013E5BC /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D2A4D31A080BDF0013E5BC /* GameOverScene.m */; };
+		90D2A4D71A080E9D0013E5BC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 90D2A4D91A080E9D0013E5BC /* Localizable.strings */; };
+		90D2A4DE1A082DC80013E5BC /* feather.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D2A4DD1A082DC80013E5BC /* feather.png */; };
+		90D2A4E01A082DD40013E5BC /* weight.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D2A4DF1A082DD40013E5BC /* weight.png */; };
+		90D712141A097641009DB8F8 /* small.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D712131A097641009DB8F8 /* small.png */; };
+		90D712161A097647009DB8F8 /* big.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D712151A097647009DB8F8 /* big.png */; };
+		90D78A0F1A0BE8A4004435E2 /* black_hole.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D78A0E1A0BE8A4004435E2 /* black_hole.png */; };
+		A547355B1A05820800492FC2 /* BonusNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A547355A1A05820800492FC2 /* BonusNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +53,19 @@
 		90D1560A19FE7B1C000F78DE /* Up to skyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Up to skyTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D1560F19FE7B1C000F78DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90D1561019FE7B1C000F78DE /* Up_to_skyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Up_to_skyTests.m; sourceTree = "<group>"; };
+		90D2A4D21A080BDF0013E5BC /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
+		90D2A4D31A080BDF0013E5BC /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
+		90D2A4D81A080E9D0013E5BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		90D2A4DA1A080F120013E5BC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		90D2A4DB1A080F120013E5BC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		90D2A4DC1A080F120013E5BC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		90D2A4DD1A082DC80013E5BC /* feather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feather.png; sourceTree = "<group>"; };
+		90D2A4DF1A082DD40013E5BC /* weight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weight.png; sourceTree = "<group>"; };
+		90D712131A097641009DB8F8 /* small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = small.png; sourceTree = "<group>"; };
+		90D712151A097647009DB8F8 /* big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big.png; sourceTree = "<group>"; };
+		90D78A0E1A0BE8A4004435E2 /* black_hole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_hole.png; sourceTree = "<group>"; };
+		A54735591A05820800492FC2 /* BonusNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonusNode.h; sourceTree = "<group>"; };
+		A547355A1A05820800492FC2 /* BonusNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonusNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +107,14 @@
 		90D155EE19FE7B1C000F78DE /* Up to sky */ = {
 			isa = PBXGroup;
 			children = (
+				90D712171A097650009DB8F8 /* img */,
 				90D155F319FE7B1C000F78DE /* AppDelegate.h */,
 				90D155F419FE7B1C000F78DE /* AppDelegate.m */,
+				90D2A4D21A080BDF0013E5BC /* GameOverScene.h */,
+				90D2A4D31A080BDF0013E5BC /* GameOverScene.m */,
+				90D2A4D91A080E9D0013E5BC /* Localizable.strings */,
+				A54735591A05820800492FC2 /* BonusNode.h */,
+				A547355A1A05820800492FC2 /* BonusNode.m */,
 				90D155F619FE7B1C000F78DE /* GameScene.h */,
 				90D155F719FE7B1C000F78DE /* GameScene.m */,
 				90D155F919FE7B1C000F78DE /* GameScene.sks */,
@@ -125,6 +152,18 @@
 				90D1560F19FE7B1C000F78DE /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		90D712171A097650009DB8F8 /* img */ = {
+			isa = PBXGroup;
+			children = (
+				90D78A0E1A0BE8A4004435E2 /* black_hole.png */,
+				90D2A4DD1A082DC80013E5BC /* feather.png */,
+				90D2A4DF1A082DD40013E5BC /* weight.png */,
+				90D712131A097641009DB8F8 /* small.png */,
+				90D712151A097647009DB8F8 /* big.png */,
+			);
+			name = img;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -176,6 +215,7 @@
 				TargetAttributes = {
 					90D155EB19FE7B1C000F78DE = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = S8QL92FQKV;
 					};
 					90D1560919FE7B1C000F78DE = {
 						CreatedOnToolsVersion = 6.1;
@@ -190,6 +230,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 90D155E319FE7B1C000F78DE;
 			productRefGroup = 90D155ED19FE7B1C000F78DE /* Products */;
@@ -210,7 +251,13 @@
 				90D1560519FE7B1C000F78DE /* LaunchScreen.xib in Resources */,
 				90D1560219FE7B1C000F78DE /* Images.xcassets in Resources */,
 				90D155FA19FE7B1C000F78DE /* GameScene.sks in Resources */,
+				90D2A4E01A082DD40013E5BC /* weight.png in Resources */,
 				90D1560019FE7B1C000F78DE /* Main.storyboard in Resources */,
+				90D2A4D71A080E9D0013E5BC /* Localizable.strings in Resources */,
+				90D712141A097641009DB8F8 /* small.png in Resources */,
+				90D2A4DE1A082DC80013E5BC /* feather.png in Resources */,
+				90D78A0F1A0BE8A4004435E2 /* black_hole.png in Resources */,
+				90D712161A097647009DB8F8 /* big.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +278,8 @@
 				90D155FD19FE7B1C000F78DE /* GameViewController.m in Sources */,
 				90D155F519FE7B1C000F78DE /* AppDelegate.m in Sources */,
 				90D155F819FE7B1C000F78DE /* GameScene.m in Sources */,
+				A547355B1A05820800492FC2 /* BonusNode.m in Sources */,
+				90D2A4D41A080BDF0013E5BC /* GameOverScene.m in Sources */,
 				90D155F219FE7B1C000F78DE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,6 +307,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				90D155FF19FE7B1C000F78DE /* Base */,
+				90D2A4DA1A080F120013E5BC /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -266,8 +316,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				90D1560419FE7B1C000F78DE /* Base */,
+				90D2A4DB1A080F120013E5BC /* ru */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		90D2A4D91A080E9D0013E5BC /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				90D2A4D81A080E9D0013E5BC /* en */,
+				90D2A4DC1A080F120013E5BC /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -355,9 +415,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Up to sky/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -365,9 +429,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Up to sky/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -424,6 +492,7 @@
 				90D1561619FE7B1C000F78DE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		90D1561719FE7B1C000F78DE /* Build configuration list for PBXNativeTarget "Up to skyTests" */ = {
 			isa = XCConfigurationList;
@@ -432,6 +501,7 @@
 				90D1561919FE7B1C000F78DE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
