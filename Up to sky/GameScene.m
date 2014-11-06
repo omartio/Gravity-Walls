@@ -30,6 +30,7 @@ CGVector currentGravity;
     NSInteger _scoreMult;
     SKShapeNode *_bar;
     NSMutableArray *_bars;
+    NSMutableArray *_blackholes;
     SKSpriteNode *_backgroundNode;
     
 }
@@ -98,6 +99,9 @@ CGVector currentGravity;
     
     //bar timer
     _bars = [[NSMutableArray alloc] init];
+    
+    //blackholes
+    _blackholes = [[NSMutableArray alloc] init];
     
 }
 
@@ -171,6 +175,26 @@ CGVector currentGravity;
     
 }
 
+-(void)update:(CFTimeInterval)currentTime {
+    /* Called before each frame is rendered */
+    float dx = MIN(_ball.position.x, self.frame.size.width - _ball.position.x);
+    float dy = MIN(_ball.position.y, self.frame.size.height - _ball.position.y);
+    
+    float ts;
+    if (dx < dy)
+    {
+        ts = dx / self.frame.size.width / 2;
+    }
+    else
+    {
+        ts = dy / self.frame.size.height / 2;
+    }
+    self.physicsWorld.gravity = [self scalarMultVector:currentGravity byNumber:ts];
+    
+    //SKShapeNode *wall = _walls[(gi+3) % 4];
+    
+}
+
 -(void)updateScore
 {
     _scoreLabel.text = [NSString stringWithFormat:@"%ld (x%ld)", _score, _scoreMult];
@@ -193,6 +217,8 @@ CGVector currentGravity;
     
     gi = (gi+1) % 4;
 }
+
+#pragma mark Levels
 
 -(void)addBar
 {
@@ -234,7 +260,7 @@ CGVector currentGravity;
         return;
     
     SKShapeNode *popBar = _bars[0];
-    
+    [_bars removeObjectAtIndex:0];
     
     [popBar runAction:
      [SKAction sequence:@[
@@ -242,29 +268,93 @@ CGVector currentGravity;
                           [SKAction removeFromParent]]
       ]
      ];
-    [_bars removeObjectAtIndex:0];
-}
-
--(void)update:(CFTimeInterval)currentTime {
-    /* Called before each frame is rendered */
-    float dx = MIN(_ball.position.x, self.frame.size.width - _ball.position.x);
-    float dy = MIN(_ball.position.y, self.frame.size.height - _ball.position.y);
-    
-    float ts;
-    if (dx < dy)
-    {
-        ts = dx / self.frame.size.width / 2;
-    }
-    else
-    {
-        ts = dy / self.frame.size.height / 2;
-    }
-    self.physicsWorld.gravity = [self scalarMultVector:currentGravity byNumber:ts];
-    
-    //SKShapeNode *wall = _walls[(gi+3) % 4];
     
 }
 
+-(void)addBlackhole
+{
+    CGPoint position = CGPointMake(self.frame.size.width / 4.0 + arc4random_uniform(self.frame.size.width / 2.0), self.frame.size.height / 4.0 + arc4random_uniform(self.frame.size.height / 2.0));
+    
+    SKFieldNode *gravityNode = [SKFieldNode radialGravityField];
+    gravityNode.enabled = true;
+    gravityNode.position = position;
+    gravityNode.strength = 5.0f;
+    gravityNode.falloff = 0.0f;
+    
+    
+    SKSpriteNode *gravityHole = [SKSpriteNode spriteNodeWithImageNamed:@"black_hole.png"];
+    gravityHole.size = CGSizeMake(32, 32);
+    gravityHole.position = position;
+    
+    [gravityHole runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:-M_2_PI duration:1]] withKey:@"bhRotate"];
+    
+    [_blackholes addObject:@{@"gravity" : gravityNode, @"sprite" : gravityHole}];
+    
+    [self addChild:gravityHole];
+    [self addChild:gravityNode];
+}
+
+-(void)popBlackhole
+{
+    if (_blackholes == 0)
+        return;
+    
+    SKFieldNode *gravityNode = _blackholes[0][@"gravity"];
+    SKSpriteNode *gravityHole = _blackholes[0][@"sprite"];
+    
+    [_blackholes removeObjectAtIndex:0];
+    
+    [gravityNode removeFromParent];
+    [gravityHole runAction:[SKAction sequence:@[[SKAction scaleTo:0 duration:0.2], [SKAction removeFromParent]]]];
+}
+
+-(void)incScoreMult
+{
+    _scoreMult++;
+    
+    if (_scoreMult == 5)
+    {
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
+                                                                           [SKAction waitForDuration:2],
+                                                                           [SKAction performSelector:@selector(popBar) onTarget:self]
+                                                                           ]]] withKey:@"bar1act"];
+        [self blinkBackgroundWithColor:[UIColor whiteColor] times:1];
+    }
+    if (_scoreMult == 8)
+    {
+        [self removeActionForKey:@"bar1act"];
+        [self popBar];
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
+                                                                           [SKAction waitForDuration:1],
+                                                                           [SKAction performSelector:@selector(addBar) onTarget:self],
+                                                                           [SKAction waitForDuration:1],
+                                                                           [SKAction performSelector:@selector(popBar) onTarget:self],
+                                                                           [SKAction waitForDuration:1],
+                                                                           [SKAction performSelector:@selector(popBar) onTarget:self],
+                                                                           ]]]
+                withKey:@"bar2act"];
+        [self blinkBackgroundWithColor:[UIColor whiteColor] times:2];
+    }
+    if (_scoreMult == 12)
+    {
+        [self removeActionForKey:@"bar2act"];
+        [self popBar];
+        [self popBar];
+        
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBlackhole) onTarget:self],
+                                                                           [SKAction waitForDuration:3],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
+                                                                           ]]] withKey:@"bhAct1"];
+        
+        [self blinkBackgroundWithColor:[UIColor whiteColor] times:3];
+    }
+}
+
+-(void)blinkBackgroundWithColor:(UIColor *)color times:(NSInteger)times
+{
+    SKAction *blink = [SKAction sequence:@[[SKAction colorizeWithColor:color colorBlendFactor:1 duration:0.1], [SKAction colorizeWithColor:[UIColor blackColor] colorBlendFactor:1 duration:0.2]]];
+    [_backgroundNode runAction:[SKAction repeatAction:blink count:times]];
+}
 
 
 #pragma mark Collision delegate
@@ -330,64 +420,7 @@ CGVector currentGravity;
     }
 }
 
--(void)incScoreMult
-{
-    _scoreMult++;
-    
-    if (_scoreMult == 5)
-    {
-        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
-                                                                           [SKAction waitForDuration:2],
-                                                                           [SKAction performSelector:@selector(popBar) onTarget:self]
-                                                                           ]]] withKey:@"bar1act"];
-        [self blinkBackgroundWithColor:[UIColor whiteColor] times:1];
-    }
-    if (_scoreMult == 8)
-    {
-        [self removeActionForKey:@"bar1act"];
-        [self popBar];
-        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
-                                                                           [SKAction waitForDuration:1],
-                                                                           [SKAction performSelector:@selector(addBar) onTarget:self],
-                                                                           [SKAction waitForDuration:1],
-                                                                           [SKAction performSelector:@selector(popBar) onTarget:self],
-                                                                           [SKAction waitForDuration:1],
-                                                                           [SKAction performSelector:@selector(popBar) onTarget:self],
-                                                                           ]]]
-                withKey:@"bar2act"];
-        [self blinkBackgroundWithColor:[UIColor whiteColor] times:2];
-    }
-    if (_scoreMult == 12)
-    {
-        [self removeActionForKey:@"bar2act"];
-        [self popBar];
-        [self popBar];
-        
-        SKFieldNode *gravityNode = [SKFieldNode radialGravityField];
-        gravityNode.enabled = true;
-        gravityNode.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
-        gravityNode.strength = 5.0f;
-        gravityNode.falloff = 0.0f;
-        
-        
-        SKSpriteNode *gravityHole = [SKSpriteNode spriteNodeWithImageNamed:@"black_hole.png"];
-        gravityHole.size = CGSizeMake(32, 32);
-        gravityHole.position = gravityNode.position;
-        
-        [gravityHole runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:-M_2_PI duration:1]] withKey:@"bhAction"];
-        
-        [self addChild:gravityHole];
-        [self addChild:gravityNode];
 
-        [self blinkBackgroundWithColor:[UIColor whiteColor] times:3];
-    }
-}
-
--(void)blinkBackgroundWithColor:(UIColor *)color times:(NSInteger)times
-{
-    SKAction *blink = [SKAction sequence:@[[SKAction colorizeWithColor:color colorBlendFactor:1 duration:0.1], [SKAction colorizeWithColor:[UIColor blackColor] colorBlendFactor:1 duration:0.2]]];
-    [_backgroundNode runAction:[SKAction repeatAction:blink count:times]];
-}
 
 #pragma mark Vector Methods
 
