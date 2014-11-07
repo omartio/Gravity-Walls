@@ -33,6 +33,8 @@ CGVector currentGravity;
     NSMutableArray *_blackholes;
     SKSpriteNode *_backgroundNode;
     
+    
+    NSInteger _moves;
 }
 
 -(id)initWithSize:(CGSize)size {
@@ -325,11 +327,9 @@ CGVector currentGravity;
         [self removeActionForKey:@"bar1act"];
         [self popBar];
         [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
-                                                                           [SKAction waitForDuration:1],
                                                                            [SKAction performSelector:@selector(addBar) onTarget:self],
-                                                                           [SKAction waitForDuration:1],
+                                                                           [SKAction waitForDuration:2],
                                                                            [SKAction performSelector:@selector(popBar) onTarget:self],
-                                                                           [SKAction waitForDuration:1],
                                                                            [SKAction performSelector:@selector(popBar) onTarget:self],
                                                                            ]]]
                 withKey:@"bar2act"];
@@ -342,11 +342,26 @@ CGVector currentGravity;
         [self popBar];
         
         [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBlackhole) onTarget:self],
-                                                                           [SKAction waitForDuration:3],
+                                                                           [SKAction waitForDuration:6],
                                                                            [SKAction performSelector:@selector(popBlackhole) onTarget:self]
                                                                            ]]] withKey:@"bhAct1"];
         
-        [self blinkBackgroundWithColor:[UIColor whiteColor] times:3];
+        [self blinkBackgroundWithColor:[UIColor redColor] times:1];
+    }
+    if (_scoreMult == 15)
+    {
+        [self removeActionForKey:@"bhAct1"];
+        [self popBlackhole];
+        
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBlackhole) onTarget:self],
+                                                                           [SKAction performSelector:@selector(addBlackhole) onTarget:self],
+                                                                           [SKAction waitForDuration:2],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
+                                                                           ]]] withKey:@"bhAct2"];
+        
+        [self blinkBackgroundWithColor:[UIColor whiteColor] times:2];
+
     }
 }
 
