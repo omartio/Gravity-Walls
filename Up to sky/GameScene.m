@@ -19,12 +19,15 @@ static const int wallCategory = 2;
 
 CGVector currentGravity;
 
+BOOL circleLevel = false;
 
 @implementation GameScene
 {
-    SKNode *_ball;
+    SKShapeNode *_ball;
     SKNode *_req;
     NSMutableArray *_walls;
+    NSMutableArray *_bonuses;
+    NSInteger _movesTake;
     SKLabelNode *_scoreLabel;
     NSInteger _score;
     NSInteger _scoreMult;
@@ -33,8 +36,14 @@ CGVector currentGravity;
     NSMutableArray *_blackholes;
     SKSpriteNode *_backgroundNode;
     
+    SKShapeNode *_circle;
     
     NSInteger _moves;
+    SKLabelNode *_movesLabel;
+    
+    BOOL first_touch;
+    
+    NSMutableArray *_levels;
 }
 
 -(id)initWithSize:(CGSize)size {
@@ -58,10 +67,12 @@ CGVector currentGravity;
     
     [self addWalls];
     
+    //Score label
     _scoreLabel = [[SKLabelNode alloc] init];
     _scoreLabel.text = @"0";
     _scoreLabel.fontColor = [UIColor whiteColor];
     _scoreLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    _scoreLabel.fontSize = 20;
     _score = 0;
     _scoreMult = 1;
     
@@ -70,9 +81,12 @@ CGVector currentGravity;
     self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
     self.physicsWorld.speed = 1;
     
+    //Ball node
     _ball = [SKShapeNode shapeNodeWithCircleOfRadius:20];
-    ((SKShapeNode *)_ball).fillColor = [UIColor whiteColor];
+    _ball.name = @"ball";
+    _ball.fillColor = [UIColor whiteColor];
     _ball.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    _ball.strokeColor = [UIColor blackColor];
     
     _ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:20];
     _ball.physicsBody.dynamic = YES;
@@ -83,28 +97,38 @@ CGVector currentGravity;
     _ball.physicsBody.collisionBitMask = wallCategory;
     _ball.physicsBody.contactTestBitMask = wallCategory;
     
+        //ball moves counter
+    _moves = 10;
+    _movesTake = 0;
+    
+    _movesLabel = [[SKLabelNode alloc] init];
+    _movesLabel.text = [NSString stringWithFormat:@"%ld", _moves];
+    _movesLabel.fontColor = [UIColor blackColor];
+    _movesLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    _movesLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+    _movesLabel.fontSize = 20;
+    _movesLabel.fontName = @"Helvetica-Bold";
+    [_ball addChild:_movesLabel];
+    
     [self addChild:_ball];
     
-    [self addChild:[BonusNode bonusOfRandomTypeCanCollideWtihBall:_ball inScane:self]];
-    [self addChild:[BonusNode bonusOfRandomTypeCanCollideWtihBall:_ball inScane:self]];
-    
-    //Gravity changing repeat
-    SKAction *wait = [SKAction waitForDuration:3];
-    SKAction *performSelector = [SKAction performSelector:@selector(nextGravity) onTarget:self];
-    SKAction *sequence = [SKAction sequence:@[performSelector, wait]];
-    SKAction *repeat   = [SKAction repeatActionForever:sequence];
-    [self runAction:repeat];
-    
-    //Score timer
-    [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(updateScore) onTarget:self],
-                                                                       [SKAction waitForDuration:1]]]]];
-    
     //bar timer
-    _bars = [[NSMutableArray alloc] init];
+    _bars       = [[NSMutableArray alloc] init];
     
     //blackholes
     _blackholes = [[NSMutableArray alloc] init];
     
+    //Levels
+    _levels     = [[NSMutableArray alloc] init];
+    
+    //First Touch (Start)
+    first_touch = NO;
+    SKLabelNode *startLabel = [SKLabelNode labelNodeWithText:NSLocalizedString(@"START", nil)];
+    startLabel.position = CGPointMake(self.frame.size.width / 2, self.frame.size.height/3);
+    startLabel.name = @"start";
+    [self addChild:startLabel];
+    
+    self.physicsWorld.speed = 0;
 }
 
 -(void)addWalls
@@ -153,7 +177,7 @@ CGVector currentGravity;
         wallNode.physicsBody.categoryBitMask = wallCategory;
         wallNode.physicsBody.collisionBitMask = ballCategory;
         wallNode.physicsBody.contactTestBitMask = ballCategory;
-        wallNode.lineWidth = 1;
+        wallNode.lineWidth = 0;
         wallNode.fillColor = [UIColor whiteColor];
     
         [self addChild:wallNode];
@@ -161,9 +185,38 @@ CGVector currentGravity;
     
 }
 
+-(void)startGame
+{
+    //Gravity changing repeat
+    SKAction *wait = [SKAction waitForDuration:3];
+    SKAction *performSelector = [SKAction performSelector:@selector(nextGravity) onTarget:self];
+    SKAction *sequence = [SKAction sequence:@[performSelector, wait]];
+    SKAction *repeat   = [SKAction repeatActionForever:sequence];
+    [self runAction:repeat];
+
+    //Bobus
+    _bonuses = [[NSMutableArray alloc] init];
+    [self addBonus];
+    [self addBonus];
+    
+    //Score timer
+    //[self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(updateScore) onTarget:self],
+    //                                                                  [SKAction waitForDuration:1]]]]];
+
+    self.physicsWorld.speed = 1;
+}
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
-
+    
+    if (!first_touch)
+    {
+        first_touch = YES;
+        [[self childNodeWithName:@"start"] removeFromParent];
+        [self startGame];
+        return;
+    }
+    
     UITouch *touch = [touches anyObject];
     CGPoint touchLocation = [touch locationInNode:self];
     //NSLog(@"%lf %lf", touchLocation.x, touchLocation.y);
@@ -173,7 +226,13 @@ CGVector currentGravity;
     CGVector impulseNorm = [self normolizeVector:direction];
     CGVector impulse = [self scalarMultVector:impulseNorm byNumber:30];
     
-    [[_ball physicsBody] applyImpulse:impulse];
+    
+    if (_moves > 0)
+    {
+        [[_ball physicsBody] applyImpulse:impulse];
+        [self addMoves:-1];
+        [self updateScore];
+    }
     
 }
 
@@ -193,14 +252,69 @@ CGVector currentGravity;
     }
     self.physicsWorld.gravity = [self scalarMultVector:currentGravity byNumber:ts];
     
-    //SKShapeNode *wall = _walls[(gi+3) % 4];
+    if (circleLevel)
+        [self checkCircle];
     
+}
+
+-(void)addBonus
+{
+    BonusNode *newBonus = [BonusNode bonusOfRandomTypeCanCollideWtihBall:_ball inScane:self];
+    [_bonuses addObject:newBonus];
+    
+    newBonus.xScale = 0;
+    newBonus.yScale = 0;
+    [self addChild:newBonus];
+    [newBonus runAction:[SKAction scaleTo:1 duration:0.3]];
+}
+
+-(void)removeBonus:(BonusNode *)bonus
+{
+    bonus.physicsBody.collisionBitMask = 0;
+    [_bonuses removeObjectIdenticalTo:bonus];
+    SKAction *removeBonus = [SKAction sequence:@[[SKAction scaleTo:0 duration:.2], [SKAction removeFromParent]]];
+    [bonus runAction:removeBonus];
+}
+
+-(void)bonusDidTake:(BonusNode *)bonus
+{
+    [self removeBonus:bonus];
+    
+    switch (bonus.type) {
+        case 0:
+        {
+            [self movesDidTake];
+            [self addMoves:bonus.moves];
+            [self runAction:[SKAction waitForDuration:1] completion:^{
+                [self addBonus];
+            }];
+            break;
+        }
+        case 1:
+            [self incScoreMult];
+        default:
+            break;
+    }
+}
+
+-(void)movesDidTake
+{
+    _movesTake++;
+    NSInteger period = 3;
+    if (_movesTake % period == 0)
+    {
+        [self stopLevel:(_movesTake / period - 2)];
+        [self runLevel:(_movesTake / period - 1)];
+        [self addChild:[BonusNode bonusOfType:5 canCollideWtihBall:_ball inScane:self]];
+    }
+
 }
 
 -(void)updateScore
 {
+    _score++;
     _scoreLabel.text = [NSString stringWithFormat:@"%ld (x%ld)", _score, _scoreMult];
-    _score+=_scoreMult;
+    //_score+=_scoreMult;
 }
 
 -(void)nextGravity
@@ -216,6 +330,10 @@ CGVector currentGravity;
     
     SKSpriteNode *wall = _walls[gi];
     wall.alpha = 1;
+    
+    if ([[wall.physicsBody allContactedBodies] indexOfObject:_ball.physicsBody] != NSNotFound)
+        [self gameOver];
+        
     
     gi = (gi+1) % 4;
 }
@@ -270,17 +388,16 @@ CGVector currentGravity;
                           [SKAction removeFromParent]]
       ]
      ];
-    
 }
 
--(void)addBlackhole
+-(void)addBlackholeWithStength:(float)strength
 {
     CGPoint position = CGPointMake(self.frame.size.width / 4.0 + arc4random_uniform(self.frame.size.width / 2.0), self.frame.size.height / 4.0 + arc4random_uniform(self.frame.size.height / 2.0));
     
     SKFieldNode *gravityNode = [SKFieldNode radialGravityField];
     gravityNode.enabled = true;
     gravityNode.position = position;
-    gravityNode.strength = 5.0f;
+    gravityNode.strength = strength;
     gravityNode.falloff = 0.0f;
     
     
@@ -288,7 +405,7 @@ CGVector currentGravity;
     gravityHole.size = CGSizeMake(32, 32);
     gravityHole.position = position;
     
-    [gravityHole runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:-M_2_PI duration:1]] withKey:@"bhRotate"];
+    [gravityHole runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:(strength > 0 ? -M_2_PI : M_2_PI*5.0) duration:1]] withKey:@"bhRotate"];
     
     [_blackholes addObject:@{@"gravity" : gravityNode, @"sprite" : gravityHole}];
     
@@ -298,7 +415,7 @@ CGVector currentGravity;
 
 -(void)popBlackhole
 {
-    if (_blackholes == 0)
+    if (_blackholes.count == 0)
         return;
     
     SKFieldNode *gravityNode = _blackholes[0][@"gravity"];
@@ -313,19 +430,22 @@ CGVector currentGravity;
 -(void)incScoreMult
 {
     _scoreMult++;
-    
-    if (_scoreMult == 5)
+    _scoreLabel.text = [NSString stringWithFormat:@"%ld (x%ld)", _score, _scoreMult];
+}
+
+-(void)runLevel:(NSInteger)level
+{
+    if (level == 0)
     {
         [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
                                                                            [SKAction waitForDuration:2],
                                                                            [SKAction performSelector:@selector(popBar) onTarget:self]
-                                                                           ]]] withKey:@"bar1act"];
+                                                                           ]]]
+                withKey:@"bar1act"];
         [self blinkBackgroundWithColor:[UIColor whiteColor] times:1];
     }
-    if (_scoreMult == 8)
+    if (level == 1)
     {
-        [self removeActionForKey:@"bar1act"];
-        [self popBar];
         [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBar) onTarget:self],
                                                                            [SKAction performSelector:@selector(addBar) onTarget:self],
                                                                            [SKAction waitForDuration:2],
@@ -335,33 +455,141 @@ CGVector currentGravity;
                 withKey:@"bar2act"];
         [self blinkBackgroundWithColor:[UIColor whiteColor] times:2];
     }
-    if (_scoreMult == 12)
+    if (level == 2)
+    {
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[self addBlackholeWithStength:5];}],
+                                                                           [SKAction waitForDuration:6],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
+                                                                           ]]]
+                withKey:@"bhAct1"];
+        
+        [self blinkBackgroundWithColor:[UIColor redColor] times:1];
+    }
+    if (level == 3)
+    {
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[self addBlackholeWithStength:5];}],
+                                                                           [SKAction runBlock:^{[self addBlackholeWithStength:5];}],
+                                                                           [SKAction waitForDuration:2],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
+                                                                           ]]]
+                withKey:@"bhAct2"];
+        
+        [self blinkBackgroundWithColor:[UIColor redColor] times:2];
+        
+    }
+    if (level == 4)
+    {
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[self addBlackholeWithStength:-2];}],
+                                                                           [SKAction waitForDuration:6],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
+                                                                           ]]]
+                withKey:@"bhReverseAct1"];
+        [self blinkBackgroundWithColor:[UIColor blueColor] times:1];
+    }
+    if (level == 5)
+    {
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[self addBlackholeWithStength:-2];}],
+                                                                           [SKAction runBlock:^{[self addBlackholeWithStength:-2];}],
+                                                                           [SKAction waitForDuration:3],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self],
+                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
+                                                                           ]]]
+                withKey:@"bhReverseAct2"];
+        [self blinkBackgroundWithColor:[UIColor blueColor] times:2];
+    }
+    if (level == 6)
+    {
+        _circle = [SKShapeNode shapeNodeWithCircleOfRadius:self.frame.size.width / 3.0];
+        _circle.fillColor = [UIColor clearColor];
+        _circle.lineWidth = 5;
+        _circle.strokeColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        _circle.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+        _circle.name = @"circle";
+        
+        [self addChild:_circle];
+        circleLevel = YES;
+    }
+    if (level == 7)
+    {
+        [self runLevel:6];
+    }
+    
+    if (level >= 8)
+    {
+        NSNumber *lvl1;
+        NSNumber *lvl2;
+        
+        int level_type1 = arc4random_uniform(4);
+        int level_type2 = arc4random_uniform(4);
+        if (level_type1 == level_type2)
+        {
+            level_type2 = (level_type2 + 1) % 4;
+        }
+        
+        lvl1 = [NSNumber numberWithInt:level_type1 + arc4random_uniform(2)];
+        lvl2 = [NSNumber numberWithInt:level_type2 + arc4random_uniform(2)];
+        
+        [_levels addObjectsFromArray:@[lvl1, lvl2]];
+        
+        [self runLevel:lvl1.integerValue];
+        [self runLevel:lvl2.integerValue];
+    }
+}
+
+-(void)stopLevel:(NSInteger)level
+{
+    if (level == 0)
+    {
+        [self removeActionForKey:@"bar1act"];
+        [self popBar];
+    }
+    if (level == 1)
     {
         [self removeActionForKey:@"bar2act"];
         [self popBar];
         [self popBar];
-        
-        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBlackhole) onTarget:self],
-                                                                           [SKAction waitForDuration:6],
-                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
-                                                                           ]]] withKey:@"bhAct1"];
-        
-        [self blinkBackgroundWithColor:[UIColor redColor] times:1];
     }
-    if (_scoreMult == 15)
+    if (level == 2)
     {
         [self removeActionForKey:@"bhAct1"];
         [self popBlackhole];
-        
-        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(addBlackhole) onTarget:self],
-                                                                           [SKAction performSelector:@selector(addBlackhole) onTarget:self],
-                                                                           [SKAction waitForDuration:2],
-                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self],
-                                                                           [SKAction performSelector:@selector(popBlackhole) onTarget:self]
-                                                                           ]]] withKey:@"bhAct2"];
-        
-        [self blinkBackgroundWithColor:[UIColor whiteColor] times:2];
-
+    }
+    if (level == 3)
+    {
+        [self removeActionForKey:@"bhAct2"];
+        [self popBlackhole];
+        [self popBlackhole];
+    }
+    if (level == 4)
+    {
+        [self removeActionForKey:@"bhReverseAct1"];
+        [self popBlackhole];
+    }
+    if (level == 5)
+    {
+        [self removeActionForKey:@"bhReverseAct2"];
+        [self popBlackhole];
+        [self popBlackhole];
+    }
+    if (level == 6)
+    {
+        circleLevel = NO;
+        [_circle removeFromParent];
+        _backgroundNode.color = [UIColor blackColor];
+    }
+    if (level == 7)
+    {
+        [self stopLevel:6];
+    }
+    
+    if (level >= 8)
+    {
+        while (_levels.count > 0) {
+            NSNumber *lvl = [_levels lastObject];
+            [self stopLevel:lvl.integerValue];
+            [_levels removeLastObject];
+        }
     }
 }
 
@@ -371,6 +599,44 @@ CGVector currentGravity;
     [_backgroundNode runAction:[SKAction repeatAction:blink count:times]];
 }
 
+-(void)checkCircle
+{
+    if (pow(_ball.position.x - CGRectGetMidX(self.frame), 2) + pow(_ball.position.y - CGRectGetMidY(self.frame), 2) > powf(self.frame.size.width / 3.0, 2))
+    {
+        //[_backgroundNode runAction:[SKAction colorizeWithColor:[UIColor whiteColor] colorBlendFactor:0 duration:0.5]];
+        _backgroundNode.color = [UIColor whiteColor];
+        _circle.strokeColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+        
+        for (BonusNode *b in _bonuses) {
+            b.alpha = 0;
+        }
+    }
+    else
+    {
+        //[_backgroundNode runAction:[SKAction colorizeWithColor:[UIColor blackColor] colorBlendFactor:0 duration:0.5]];
+        _backgroundNode.color = [UIColor blackColor];
+        _circle.strokeColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        
+        for (BonusNode *b in _bonuses) {
+            b.alpha = 1;
+        }
+    }
+}
+
+-(void)addMoves:(NSInteger)number
+{
+    _moves += number;
+    _movesLabel.text = [NSString stringWithFormat:@"%ld", _moves];
+    if (_moves == 0)
+        return;
+    _ball.physicsBody.mass = 0.05 * (float)_moves / 10;
+}
+
+-(void)gameOver
+{
+    GameOverScene *gameOver = [[GameOverScene alloc] initWithSize:self.size score:_score];
+    [self.view presentScene:gameOver transition:[SKTransition fadeWithDuration:0.5]];
+}
 
 #pragma mark Collision delegate
 
@@ -395,8 +661,7 @@ CGVector currentGravity;
         
         if (wall.alpha == 1.0)
         {
-            GameOverScene *gameOver = [[GameOverScene alloc] initWithSize:self.size score:_score];
-            [self.view presentScene:gameOver transition:[SKTransition fadeWithDuration:0.5]];
+            [self gameOver];
             
             //_score = 0;
             //[self updateScore];
@@ -418,24 +683,12 @@ CGVector currentGravity;
         }
         
         NSLog(@"Bonus with type:(%ld) contact", bonus.type);
-        [self incScoreMult];
-        [_ball runAction:bonus.action];
+        //[self incScoreMult];
+        //[self addMoves:bonus.moves];
         
-        SKAction *removeBonus = [SKAction sequence:@[[SKAction scaleTo:0 duration:.2], [SKAction waitForDuration:0.5], [SKAction removeFromParent]]];
-        [bonus runAction:removeBonus completion:^{
-            BonusNode *newBonus = [BonusNode bonusOfRandomTypeCanCollideWtihBall:_ball inScane:self];
-            newBonus.xScale = 0;
-            newBonus.yScale = 0;
-            [self addChild:newBonus];
-            [newBonus runAction:[SKAction scaleTo:1 duration:0.3]];
-            
-        }];
-        
-        
+        [self bonusDidTake:bonus];
     }
 }
-
-
 
 #pragma mark Vector Methods
 

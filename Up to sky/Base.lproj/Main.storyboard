@@ -20,6 +20,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="720" y="367"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.0" green="0.0" blue="0.97855659965034969" alpha="1" colorSpace="calibratedRGB"/>

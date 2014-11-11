@@ -13,7 +13,7 @@ static const int bonusHitCategory = 4;
 @interface BonusNode : SKShapeNode
 
 @property (nonatomic) NSInteger type;
-@property (nonatomic, strong) SKNode *ball;
+@property (nonatomic) NSInteger moves;
 @property (nonatomic, strong) SKAction *action;
 
 +(instancetype)bonusOfType:(NSInteger)type canCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene;

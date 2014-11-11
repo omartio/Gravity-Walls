@@ -9,7 +9,7 @@
 #import "BonusNode.h"
 
 const float radius = 15;
-const int bonus_count = 4;
+const int bonus_count = 5;
 
 @implementation BonusNode
 
@@ -26,10 +26,32 @@ const int bonus_count = 4;
     bonus.physicsBody.collisionBitMask = ball.physicsBody.categoryBitMask;
     bonus.physicsBody.contactTestBitMask = ball.physicsBody.categoryBitMask;
     
-    bonus.type = type;
-    bonus.ball = ball;
     
+    bonus.moves = 0;
     
+    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
+    label.fontColor = [UIColor whiteColor];
+    label.fontSize = 18;
+    label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    label.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+    
+    if (type < 5)
+    {
+        bonus.moves = type +1;
+        
+        label.text = [NSString stringWithFormat:@"%ld", bonus.moves];
+        
+        bonus.type = 0;
+    }
+    if (type == 5)
+    {
+        label.text = @"✖︎2";
+        bonus.type = 1;
+    }
+    
+    [bonus addChild:label];
+    
+    /*
     SKSpriteNode *img;
     NSString *img_name;
     
@@ -62,8 +84,8 @@ const int bonus_count = 4;
     
     img = [SKSpriteNode spriteNodeWithImageNamed:img_name];
     img.size = CGSizeMake(radius , radius );
-    
-    [bonus addChild:img];
+     */
+    //[bonus addChild:img];
     
     return bonus;
 }
