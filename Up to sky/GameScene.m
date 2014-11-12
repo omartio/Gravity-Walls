@@ -300,14 +300,13 @@ BOOL circleLevel = false;
 -(void)movesDidTake
 {
     _movesTake++;
-    NSInteger period = 3;
+    NSInteger period = 10;
     if (_movesTake % period == 0)
     {
         [self stopLevel:(_movesTake / period - 2)];
         [self runLevel:(_movesTake / period - 1)];
         [self addChild:[BonusNode bonusOfType:5 canCollideWtihBall:_ball inScane:self]];
     }
-
 }
 
 -(void)updateScore
