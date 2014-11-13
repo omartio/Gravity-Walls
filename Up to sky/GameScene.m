@@ -633,7 +633,15 @@ BOOL circleLevel = false;
 
 -(void)gameOver
 {
-    GameOverScene *gameOver = [[GameOverScene alloc] initWithSize:self.size score:_score];
+    UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, NO, 1);
+    [self.view drawViewHierarchyInRect:self.frame afterScreenUpdates:YES];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self.goDelegate showAd];
+    
+    GameOverScene *gameOver = [[GameOverScene alloc] initWithSize:self.size score:_score gameoverImg:viewImage];
+    gameOver.goDelegate = self.goDelegate;
     [self.view presentScene:gameOver transition:[SKTransition fadeWithDuration:0.5]];
 }
 

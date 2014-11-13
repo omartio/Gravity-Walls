@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <SpriteKit/SpriteKit.h>
+#import "GameScene.h"
+#import <iAd/iAd.h>
 
-@interface GameViewController : UIViewController
+@interface GameViewController : UIViewController <GameOverSceneDelegate, ADBannerViewDelegate>
 
 @end

@@ -14,15 +14,24 @@
 {
     SKSpriteNode *_retryButton;
     SKSpriteNode *_shareButton;
+    NSInteger _score;
+    UIImage *_gameOverImg;
+
 }
--(instancetype)initWithSize:(CGSize)size score:(NSInteger)score
+-(instancetype)initWithSize:(CGSize)size score:(NSInteger)score gameoverImg:(UIImage *)img
 {
     if (self = [super initWithSize:size])
     {
-        SKLabelNode *scoreLabel = [SKLabelNode labelNodeWithText:[NSString stringWithFormat:@"%@: %ld", NSLocalizedString(@"SCORE", nil), score]];
-        scoreLabel.position = CGPointMake(size.width / 2.0, size.height / 2.0 + 200);
+        _score = score;
+        _gameOverImg = img;
         
+        SKLabelNode *scoreLabel = [SKLabelNode labelNodeWithText: NSLocalizedString(@"SCORE", nil)];
+        scoreLabel.position = CGPointMake(size.width / 2.0, size.height / 2.0 + 200);
         [self addChild:scoreLabel];
+        
+        SKLabelNode *pointLabel = [SKLabelNode labelNodeWithText:[NSString stringWithFormat:@"%ld", score]];
+        pointLabel.position = CGPointMake(size.width / 2.0, size.height / 2.0 + 130);
+        [self addChild:pointLabel];
         
         _retryButton = [SKSpriteNode spriteNodeWithColor:[UIColor whiteColor] size:CGSizeMake(200, 50)];
         _retryButton.position = CGPointMake(size.width / 2.0, size.height / 2.0 - 100);
@@ -57,6 +66,8 @@
     if ([_retryButton containsPoint:location])
     {
         GameScene *newGameScene = [GameScene sceneWithSize:self.size];
+        newGameScene.goDelegate = self.goDelegate;
+        [self.goDelegate hideAd];
         [self.view presentScene:newGameScene transition:[SKTransition fadeWithDuration:0.5]];
     }
     if ([_shareButton containsPoint:location])
@@ -67,7 +78,7 @@
 
 -(void)share
 {
-    NSArray *items = @[[UIImage imageNamed:@"big.png"], @"Example" , [NSURL URLWithString:@"http://vk.com/omartio"]];
+    NSArray *items = @[_gameOverImg, [NSString stringWithFormat:NSLocalizedString(@"SHAREDTEXT", nil), _score] , [NSURL URLWithString:@"http://vk.com/omartio"]];
     VKontakteActivity *vkontakteActivity = [[VKontakteActivity alloc] initWithParent:self.view.window.rootViewController];
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:@[vkontakteActivity]];

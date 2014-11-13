@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		88C570841B9C490C8EAF701A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AF79F0A6214C65AA01D678 /* libPods.a */; };
 		9093D1271A13C3F10076D239 /* vk_activity_ios8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */; };
+		90D076641A1422F70099D80A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90D076631A1422F70099D80A /* iAd.framework */; };
 		90D155F219FE7B1C000F78DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F119FE7B1C000F78DE /* main.m */; };
 		90D155F519FE7B1C000F78DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F419FE7B1C000F78DE /* AppDelegate.m */; };
 		90D155F819FE7B1C000F78DE /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F719FE7B1C000F78DE /* GameScene.m */; };
@@ -43,6 +44,7 @@
 		42AF79F0A6214C65AA01D678 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		70ED0C0C012B4C6DA2F362C7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vk_activity_ios8@2x.png"; sourceTree = "<group>"; };
+		90D076631A1422F70099D80A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		90D155EC19FE7B1C000F78DE /* Up to sky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Up to sky.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D155F019FE7B1C000F78DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90D155F119FE7B1C000F78DE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90D076641A1422F70099D80A /* iAd.framework in Frameworks */,
 				88C570841B9C490C8EAF701A /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,6 +186,7 @@
 		ABD52CA765854B16957EB501 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				90D076631A1422F70099D80A /* iAd.framework */,
 				42AF79F0A6214C65AA01D678 /* libPods.a */,
 			);
 			name = Frameworks;
