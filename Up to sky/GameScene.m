@@ -271,6 +271,8 @@ BOOL circleLevel = false;
 -(void)removeBonus:(BonusNode *)bonus
 {
     bonus.physicsBody.collisionBitMask = 0;
+    bonus.physicsBody.categoryBitMask = 0;
+    
     [_bonuses removeObjectIdenticalTo:bonus];
     SKAction *removeBonus = [SKAction sequence:@[[SKAction scaleTo:0 duration:.2], [SKAction removeFromParent]]];
     [bonus runAction:removeBonus];
@@ -639,6 +641,8 @@ BOOL circleLevel = false;
     UIGraphicsEndImageContext();
     
     [self.goDelegate showAd];
+    //Game center
+    [self.goDelegate reportScore:_score];
     
     GameOverScene *gameOver = [[GameOverScene alloc] initWithSize:self.size score:_score gameoverImg:viewImage];
     gameOver.goDelegate = self.goDelegate;

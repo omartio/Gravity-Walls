@@ -12,6 +12,8 @@
 @protocol GameOverSceneDelegate <NSObject>
 - (void)hideAd;
 - (void)showAd;
+- (void)reportScore:(NSInteger)newScore;
+- (void)showLeaderboard;
 @end
 
 

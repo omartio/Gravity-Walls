@@ -10,6 +10,7 @@
 		88C570841B9C490C8EAF701A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AF79F0A6214C65AA01D678 /* libPods.a */; };
 		9093D1271A13C3F10076D239 /* vk_activity_ios8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */; };
 		90D076641A1422F70099D80A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90D076631A1422F70099D80A /* iAd.framework */; };
+		90D076661A14F3FD0099D80A /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90D076651A14F3FD0099D80A /* GameKit.framework */; };
 		90D155F219FE7B1C000F78DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F119FE7B1C000F78DE /* main.m */; };
 		90D155F519FE7B1C000F78DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F419FE7B1C000F78DE /* AppDelegate.m */; };
 		90D155F819FE7B1C000F78DE /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F719FE7B1C000F78DE /* GameScene.m */; };
@@ -24,6 +25,10 @@
 		90D2A4D71A080E9D0013E5BC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 90D2A4D91A080E9D0013E5BC /* Localizable.strings */; };
 		90D2A4DE1A082DC80013E5BC /* feather.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D2A4DD1A082DC80013E5BC /* feather.png */; };
 		90D2A4E01A082DD40013E5BC /* weight.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D2A4DF1A082DD40013E5BC /* weight.png */; };
+		90D6420A1A1564CD00A5F8DE /* podium.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D642091A1564CD00A5F8DE /* podium.png */; };
+		90D6420E1A1638D700A5F8DE /* vk_activity_ios8.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D6420B1A1638D700A5F8DE /* vk_activity_ios8.png */; };
+		90D6420F1A1638D700A5F8DE /* vk_activity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D6420C1A1638D700A5F8DE /* vk_activity@2x.png */; };
+		90D642101A1638D700A5F8DE /* vk_activity.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D6420D1A1638D700A5F8DE /* vk_activity.png */; };
 		90D712141A097641009DB8F8 /* small.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D712131A097641009DB8F8 /* small.png */; };
 		90D712161A097647009DB8F8 /* big.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D712151A097647009DB8F8 /* big.png */; };
 		90D78A0F1A0BE8A4004435E2 /* black_hole.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D78A0E1A0BE8A4004435E2 /* black_hole.png */; };
@@ -45,6 +50,7 @@
 		70ED0C0C012B4C6DA2F362C7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vk_activity_ios8@2x.png"; sourceTree = "<group>"; };
 		90D076631A1422F70099D80A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		90D076651A14F3FD0099D80A /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		90D155EC19FE7B1C000F78DE /* Up to sky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Up to sky.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D155F019FE7B1C000F78DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90D155F119FE7B1C000F78DE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -71,6 +77,10 @@
 		90D2A4DC1A080F120013E5BC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		90D2A4DD1A082DC80013E5BC /* feather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feather.png; sourceTree = "<group>"; };
 		90D2A4DF1A082DD40013E5BC /* weight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weight.png; sourceTree = "<group>"; };
+		90D642091A1564CD00A5F8DE /* podium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = podium.png; path = ../../../../Downloads/podium.png; sourceTree = "<group>"; };
+		90D6420B1A1638D700A5F8DE /* vk_activity_ios8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vk_activity_ios8.png; sourceTree = "<group>"; };
+		90D6420C1A1638D700A5F8DE /* vk_activity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vk_activity@2x.png"; sourceTree = "<group>"; };
+		90D6420D1A1638D700A5F8DE /* vk_activity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vk_activity.png; sourceTree = "<group>"; };
 		90D712131A097641009DB8F8 /* small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = small.png; sourceTree = "<group>"; };
 		90D712151A097647009DB8F8 /* big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big.png; sourceTree = "<group>"; };
 		90D78A0E1A0BE8A4004435E2 /* black_hole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_hole.png; sourceTree = "<group>"; };
@@ -83,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90D076661A14F3FD0099D80A /* GameKit.framework in Frameworks */,
 				90D076641A1422F70099D80A /* iAd.framework in Frameworks */,
 				88C570841B9C490C8EAF701A /* libPods.a in Frameworks */,
 			);
@@ -173,7 +184,11 @@
 		90D712171A097650009DB8F8 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				90D6420B1A1638D700A5F8DE /* vk_activity_ios8.png */,
 				9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */,
+				90D6420D1A1638D700A5F8DE /* vk_activity.png */,
+				90D6420C1A1638D700A5F8DE /* vk_activity@2x.png */,
+				90D642091A1564CD00A5F8DE /* podium.png */,
 				90D78A0E1A0BE8A4004435E2 /* black_hole.png */,
 				90D2A4DD1A082DC80013E5BC /* feather.png */,
 				90D2A4DF1A082DD40013E5BC /* weight.png */,
@@ -186,6 +201,7 @@
 		ABD52CA765854B16957EB501 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				90D076651A14F3FD0099D80A /* GameKit.framework */,
 				90D076631A1422F70099D80A /* iAd.framework */,
 				42AF79F0A6214C65AA01D678 /* libPods.a */,
 			);
@@ -244,6 +260,11 @@
 					90D155EB19FE7B1C000F78DE = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = S8QL92FQKV;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 					90D1560919FE7B1C000F78DE = {
 						CreatedOnToolsVersion = 6.1;
@@ -276,15 +297,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90D6420E1A1638D700A5F8DE /* vk_activity_ios8.png in Resources */,
 				90D1560519FE7B1C000F78DE /* LaunchScreen.xib in Resources */,
 				90D1560219FE7B1C000F78DE /* Images.xcassets in Resources */,
 				90D155FA19FE7B1C000F78DE /* GameScene.sks in Resources */,
 				90D2A4E01A082DD40013E5BC /* weight.png in Resources */,
+				90D6420F1A1638D700A5F8DE /* vk_activity@2x.png in Resources */,
 				90D1560019FE7B1C000F78DE /* Main.storyboard in Resources */,
 				90D2A4D71A080E9D0013E5BC /* Localizable.strings in Resources */,
 				9093D1271A13C3F10076D239 /* vk_activity_ios8@2x.png in Resources */,
 				90D712141A097641009DB8F8 /* small.png in Resources */,
+				90D642101A1638D700A5F8DE /* vk_activity.png in Resources */,
 				90D2A4DE1A082DC80013E5BC /* feather.png in Resources */,
+				90D6420A1A1564CD00A5F8DE /* podium.png in Resources */,
 				90D78A0F1A0BE8A4004435E2 /* black_hole.png in Resources */,
 				90D712161A097647009DB8F8 /* big.png in Resources */,
 			);
@@ -486,6 +511,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -501,6 +527,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

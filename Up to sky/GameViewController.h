@@ -10,7 +10,10 @@
 #import <SpriteKit/SpriteKit.h>
 #import "GameScene.h"
 #import <iAd/iAd.h>
+#import <GameKit/GameKit.h>
 
-@interface GameViewController : UIViewController <GameOverSceneDelegate, ADBannerViewDelegate>
+@interface GameViewController : UIViewController <GameOverSceneDelegate, ADBannerViewDelegate, GKGameCenterControllerDelegate>
+
+-(void)authenticateLocalPlayer;
 
 @end
