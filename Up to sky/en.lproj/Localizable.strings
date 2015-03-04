@@ -12,3 +12,7 @@
 "PLAY" = "Play";
 "SHARE" = "Share";
 "SHAREDTEXT" = "I scored %ld points in Gravity W4LLS";
+"HELP1" = "The number on the ball indicates its weight.";
+"HELP2" = "When the weights gets too small or heavy,";
+"HELP3" = "it becomes difficult to control the ball.";
+"HELP4" = "Do not run into the active wall!";

@@ -41,9 +41,11 @@ BOOL circleLevel = false;
     NSInteger _moves;
     SKLabelNode *_movesLabel;
     
-    BOOL first_touch;
+    //BOOL first_touch;
     
     NSMutableArray *_levels;
+    
+    SKLabelNode *_helpButton;
 }
 
 -(id)initWithSize:(CGSize)size {
@@ -73,22 +75,23 @@ BOOL circleLevel = false;
     _scoreLabel.fontColor = [UIColor whiteColor];
     _scoreLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
     _scoreLabel.fontSize = 20;
+    _scoreLabel.zPosition = -1;
     _score = 0;
     _scoreMult = 1;
     
     [self addChild:_scoreLabel];
     
     self.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 );
-    self.physicsWorld.speed = 1;
     
     //Ball node
-    _ball = [SKShapeNode shapeNodeWithCircleOfRadius:20];
+    float ballR = 20.0;
+    _ball = [SKShapeNode shapeNodeWithCircleOfRadius:ballR];
     _ball.name = @"ball";
     _ball.fillColor = [UIColor whiteColor];
     _ball.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
     _ball.strokeColor = [UIColor blackColor];
     
-    _ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:20];
+    _ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:ballR];
     _ball.physicsBody.dynamic = YES;
     _ball.physicsBody.allowsRotation = YES;
     _ball.physicsBody.mass = 0.05;
@@ -97,7 +100,7 @@ BOOL circleLevel = false;
     _ball.physicsBody.collisionBitMask = wallCategory;
     _ball.physicsBody.contactTestBitMask = wallCategory;
     
-        //ball moves counter
+    //ball moves counter
     _moves = 10;
     _movesTake = 0;
     
@@ -106,11 +109,17 @@ BOOL circleLevel = false;
     _movesLabel.fontColor = [UIColor blackColor];
     _movesLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
     _movesLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
-    _movesLabel.fontSize = 20;
+    _movesLabel.fontSize = ballR;
     _movesLabel.fontName = @"Helvetica-Bold";
     [_ball addChild:_movesLabel];
     
     [self addChild:_ball];
+    
+    //help
+    _helpButton = [SKLabelNode labelNodeWithText:@"Help"];
+    _helpButton.fontName = @"HelveticaNeue";
+    _helpButton.position = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height * 3.0 / 4.0);
+    [self addChild:_helpButton];
     
     //bar timer
     _bars       = [[NSMutableArray alloc] init];
@@ -122,7 +131,7 @@ BOOL circleLevel = false;
     _levels     = [[NSMutableArray alloc] init];
     
     //First Touch (Start)
-    first_touch = NO;
+    _first_touch = NO;
     SKLabelNode *startLabel = [SKLabelNode labelNodeWithText:NSLocalizedString(@"START", nil)];
     startLabel.position = CGPointMake(self.frame.size.width / 2, self.frame.size.height/3);
     startLabel.name = @"start";
@@ -195,31 +204,39 @@ BOOL circleLevel = false;
     [self runAction:repeat];
 
     //Bobus
-    _bonuses = [[NSMutableArray alloc] init];
+    _bonuses = [BonusNode prevBonuses];
     [self addBonus];
     [self addBonus];
     
     //Score timer
     //[self runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction performSelector:@selector(updateScore) onTarget:self],
     //                                                                  [SKAction waitForDuration:1]]]]];
-
+    
+    [_helpButton removeFromParent];
+    
     self.physicsWorld.speed = 1;
 }
 
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
+    UITouch *touch = [touches anyObject];
+    CGPoint touchLocation = [touch locationInNode:self];
     
-    if (!first_touch)
+    if (!_first_touch)
     {
-        first_touch = YES;
+        if ([_helpButton containsPoint:touchLocation])
+        {
+            HelpScene *helpScene = [[HelpScene alloc] initWithSize:self.size];
+            [self.view presentScene:helpScene transition:[SKTransition moveInWithDirection:SKTransitionDirectionDown duration:0.5]];
+        }
+        
+        _first_touch = YES;
         [[self childNodeWithName:@"start"] removeFromParent];
         [self startGame];
         return;
     }
     
-    UITouch *touch = [touches anyObject];
-    CGPoint touchLocation = [touch locationInNode:self];
-    //NSLog(@"%lf %lf", touchLocation.x, touchLocation.y);
     CGPoint objLocation = _ball.position;
     
     CGVector direction = [self makeVectorFromPoint:objLocation toPoint:touchLocation];
@@ -231,7 +248,7 @@ BOOL circleLevel = false;
     {
         [[_ball physicsBody] applyImpulse:impulse];
         [self addMoves:-1];
-        [self updateScore];
+        //[self updateScore];
     }
     
 }
@@ -259,7 +276,7 @@ BOOL circleLevel = false;
 
 -(void)addBonus
 {
-    BonusNode *newBonus = [BonusNode bonusOfRandomTypeCanCollideWtihBall:_ball inScane:self];
+    BonusNode *newBonus = [BonusNode bonusOfRandomMovesInRange:5 CanCollideWtihBall:_ball inScane:self];
     [_bonuses addObject:newBonus];
     
     newBonus.xScale = 0;
@@ -287,6 +304,7 @@ BOOL circleLevel = false;
         {
             [self movesDidTake];
             [self addMoves:bonus.moves];
+            [self incScoreBy:bonus.moves];
             [self runAction:[SKAction waitForDuration:1] completion:^{
                 [self addBonus];
             }];
@@ -294,6 +312,10 @@ BOOL circleLevel = false;
         }
         case 1:
             [self incScoreMult];
+            break;
+        case 2:
+            [self runAction:bonus.action];
+            break;
         default:
             break;
     }
@@ -305,17 +327,19 @@ BOOL circleLevel = false;
     NSInteger period = 10;
     if (_movesTake % period == 0)
     {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self stopLevel:(_movesTake / period - 2)];
         [self runLevel:(_movesTake / period - 1)];
-        [self addChild:[BonusNode bonusOfType:5 canCollideWtihBall:_ball inScane:self]];
+        [self addChild:[BonusNode bonusOfType:1 canCollideWtihBall:_ball inScane:self]];
+        [self addChild:[BonusNode bonusOfType:2 canCollideWtihBall:_ball inScane:self]];
+        });
     }
 }
 
--(void)updateScore
+-(void)incScoreBy:(NSInteger)points
 {
-    _score++;
+    _score += _scoreMult * points;
     _scoreLabel.text = [NSString stringWithFormat:@"%ld (x%ld)", _score, _scoreMult];
-    //_score+=_scoreMult;
 }
 
 -(void)nextGravity
@@ -640,12 +664,11 @@ BOOL circleLevel = false;
     UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    [self.goDelegate showAd];
+    [[User sharedUser] showAd];
     //Game center
-    [self.goDelegate reportScore:_score];
+    [[User sharedUser] reportScore:_score];
     
     GameOverScene *gameOver = [[GameOverScene alloc] initWithSize:self.size score:_score gameoverImg:viewImage];
-    gameOver.goDelegate = self.goDelegate;
     [self.view presentScene:gameOver transition:[SKTransition fadeWithDuration:0.5]];
 }
 

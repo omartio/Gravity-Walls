@@ -11,9 +11,9 @@
 #import "GameScene.h"
 #import <iAd/iAd.h>
 #import <GameKit/GameKit.h>
+#import "User.h"
 
-@interface GameViewController : UIViewController <GameOverSceneDelegate, ADBannerViewDelegate, GKGameCenterControllerDelegate>
+@interface GameViewController : UIViewController
 
--(void)authenticateLocalPlayer;
 
 @end

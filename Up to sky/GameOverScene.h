@@ -8,10 +8,10 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "GameScene.h"
+#import "User.h"
 
 @interface GameOverScene : SKScene
 
-@property (nonatomic, weak) id <GameOverSceneDelegate> goDelegate;
 -(instancetype)initWithSize:(CGSize)size score:(NSInteger)score gameoverImg:(UIImage *)img;
 
 @end

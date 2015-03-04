@@ -8,6 +8,8 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "BonusNode.h"
+#import "User.h"
+#import "HelpScene.h"
 
 @protocol GameOverSceneDelegate <NSObject>
 - (void)hideAd;
@@ -20,5 +22,6 @@
 @interface GameScene : SKScene <SKPhysicsContactDelegate>
 
 @property (nonatomic, weak) id <GameOverSceneDelegate> goDelegate;
+@property (nonatomic) BOOL first_touch;
 
 @end

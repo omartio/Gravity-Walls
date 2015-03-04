@@ -46,7 +46,7 @@
         
         
         _shareButton = [SKSpriteNode spriteNodeWithColor:[UIColor whiteColor] size:CGSizeMake(140, 50)];
-        _shareButton.position = CGPointMake(size.width / 2.0 - 30, size.height / 2.0 - 200);
+        _shareButton.position = CGPointMake(size.width / 2.0 - 30, size.height / 2.0 - 180);
         [self addChild:_shareButton];
         
         SKLabelNode *shareLabel = [SKLabelNode labelNodeWithText:NSLocalizedString(@"SHARE", nil)];
@@ -57,7 +57,7 @@
         [_shareButton addChild:shareLabel];
         
         _leaderboardButton = [SKSpriteNode spriteNodeWithColor:[UIColor whiteColor] size:CGSizeMake(50, 50)];
-        _leaderboardButton.position = CGPointMake(size.width / 2.0 + 75, size.height / 2.0 - 200);
+        _leaderboardButton.position = CGPointMake(size.width / 2.0 + 75, size.height / 2.0 - 180);
         [self addChild:_leaderboardButton];
         
         SKSpriteNode *podiumNode = [SKSpriteNode spriteNodeWithImageNamed:@"podium.png"];
@@ -88,8 +88,7 @@
     if ([_retryButton containsPoint:location])
     {
         GameScene *newGameScene = [GameScene sceneWithSize:self.size];
-        newGameScene.goDelegate = self.goDelegate;
-        [self.goDelegate hideAd];
+        [[User sharedUser] hideAd];
         [self.view presentScene:newGameScene transition:[SKTransition fadeWithDuration:0.5]];
     }
     if ([_shareButton containsPoint:location])
@@ -98,7 +97,7 @@
     }
     if ([_leaderboardButton containsPoint:location])
     {
-        [self.goDelegate showLeaderboard];
+        [[User sharedUser] showLeaderboard];
     }
 }
 

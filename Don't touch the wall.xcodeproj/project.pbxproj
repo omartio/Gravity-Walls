@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		88C570841B9C490C8EAF701A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AF79F0A6214C65AA01D678 /* libPods.a */; };
 		9093D1271A13C3F10076D239 /* vk_activity_ios8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */; };
+		90CE22581A22929200B49CBB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 90CE22571A22929200B49CBB /* User.m */; };
 		90D076641A1422F70099D80A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90D076631A1422F70099D80A /* iAd.framework */; };
 		90D076661A14F3FD0099D80A /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90D076651A14F3FD0099D80A /* GameKit.framework */; };
 		90D155F219FE7B1C000F78DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D155F119FE7B1C000F78DE /* main.m */; };
@@ -32,6 +33,7 @@
 		90D712141A097641009DB8F8 /* small.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D712131A097641009DB8F8 /* small.png */; };
 		90D712161A097647009DB8F8 /* big.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D712151A097647009DB8F8 /* big.png */; };
 		90D78A0F1A0BE8A4004435E2 /* black_hole.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D78A0E1A0BE8A4004435E2 /* black_hole.png */; };
+		90D9386C1A224A91002737AA /* HelpScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 90D9386B1A224A91002737AA /* HelpScene.m */; };
 		A547355B1A05820800492FC2 /* BonusNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A547355A1A05820800492FC2 /* BonusNode.m */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,8 @@
 		42AF79F0A6214C65AA01D678 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		70ED0C0C012B4C6DA2F362C7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		9093D1261A13C3F10076D239 /* vk_activity_ios8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vk_activity_ios8@2x.png"; sourceTree = "<group>"; };
+		90CE22561A22929200B49CBB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		90CE22571A22929200B49CBB /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		90D076631A1422F70099D80A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		90D076651A14F3FD0099D80A /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		90D155EC19FE7B1C000F78DE /* Up to sky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Up to sky.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +88,8 @@
 		90D712131A097641009DB8F8 /* small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = small.png; sourceTree = "<group>"; };
 		90D712151A097647009DB8F8 /* big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big.png; sourceTree = "<group>"; };
 		90D78A0E1A0BE8A4004435E2 /* black_hole.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_hole.png; sourceTree = "<group>"; };
+		90D9386A1A224A91002737AA /* HelpScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpScene.h; sourceTree = "<group>"; };
+		90D9386B1A224A91002737AA /* HelpScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpScene.m; sourceTree = "<group>"; };
 		A54735591A05820800492FC2 /* BonusNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonusNode.h; sourceTree = "<group>"; };
 		A547355A1A05820800492FC2 /* BonusNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonusNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +143,8 @@
 				90D155F419FE7B1C000F78DE /* AppDelegate.m */,
 				90D2A4D21A080BDF0013E5BC /* GameOverScene.h */,
 				90D2A4D31A080BDF0013E5BC /* GameOverScene.m */,
+				90D9386A1A224A91002737AA /* HelpScene.h */,
+				90D9386B1A224A91002737AA /* HelpScene.m */,
 				90D2A4D91A080E9D0013E5BC /* Localizable.strings */,
 				A54735591A05820800492FC2 /* BonusNode.h */,
 				A547355A1A05820800492FC2 /* BonusNode.m */,
@@ -145,6 +153,8 @@
 				90D155F919FE7B1C000F78DE /* GameScene.sks */,
 				90D155FB19FE7B1C000F78DE /* GameViewController.h */,
 				90D155FC19FE7B1C000F78DE /* GameViewController.m */,
+				90CE22561A22929200B49CBB /* User.h */,
+				90CE22571A22929200B49CBB /* User.m */,
 				90D1F2F01A13C09900DE1F03 /* VKontakteActivity.h */,
 				90D1F2EE1A13C09200DE1F03 /* VKontakteActivity.m */,
 				90D155FE19FE7B1C000F78DE /* Main.storyboard */,
@@ -364,9 +374,11 @@
 			files = (
 				90D1F2EF1A13C09200DE1F03 /* VKontakteActivity.m in Sources */,
 				90D155FD19FE7B1C000F78DE /* GameViewController.m in Sources */,
+				90CE22581A22929200B49CBB /* User.m in Sources */,
 				90D155F519FE7B1C000F78DE /* AppDelegate.m in Sources */,
 				90D155F819FE7B1C000F78DE /* GameScene.m in Sources */,
 				A547355B1A05820800492FC2 /* BonusNode.m in Sources */,
+				90D9386C1A224A91002737AA /* HelpScene.m in Sources */,
 				90D2A4D41A080BDF0013E5BC /* GameOverScene.m in Sources */,
 				90D155F219FE7B1C000F78DE /* main.m in Sources */,
 			);
@@ -510,7 +522,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "657674AD-6730-4A53-83EB-8EF62FBC463F";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -526,7 +538,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "657674AD-6730-4A53-83EB-8EF62FBC463F";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -8,93 +8,111 @@
 
 #import "BonusNode.h"
 
-const float radius = 15;
+float radius = 15;
 const int bonus_count = 5;
 
 @implementation BonusNode
 
-+(instancetype)bonusOfType:(NSInteger)type canCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene
+-(instancetype)initBonusCanCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene
 {
-    BonusNode *bonus = [self shapeNodeWithCircleOfRadius:radius];// [[self alloc] initWithRadius:30.0];
+    //radius = scene.frame.size.width / 21.0;
     
-    bonus.fillColor = [UIColor blackColor];
-    bonus.position = CGPointMake(arc4random_uniform(scene.frame.size.width - radius*4) + radius*2, arc4random_uniform(scene.frame.size.height - radius*3) + radius*2);
+    self = [BonusNode shapeNodeWithCircleOfRadius:radius];// [[self alloc] initWithRadius:30.0];
     
-    bonus.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:radius];
-    bonus.physicsBody.dynamic = NO;
-    bonus.physicsBody.categoryBitMask = bonusHitCategory;
-    bonus.physicsBody.collisionBitMask = ball.physicsBody.categoryBitMask;
-    bonus.physicsBody.contactTestBitMask = ball.physicsBody.categoryBitMask;
+    self.fillColor = [UIColor blackColor];
     
-    
-    bonus.moves = 0;
-    
-    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
-    label.fontColor = [UIColor whiteColor];
-    label.fontSize = 18;
-    label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
-    label.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
-    
-    if (type < 5)
+    CGPoint position = CGPointMake(arc4random_uniform(scene.frame.size.width - radius*4) + radius*2, arc4random_uniform(scene.frame.size.height - radius*3) + radius*2);
+    while (![self checkPosition:position])
     {
-        bonus.moves = type +1;
-        
-        label.text = [NSString stringWithFormat:@"%ld", bonus.moves];
-        
-        bonus.type = 0;
+        position = CGPointMake(arc4random_uniform(scene.frame.size.width - radius*4) + radius*2, arc4random_uniform(scene.frame.size.height - radius*3) + radius*2);
     }
-    if (type == 5)
+    
+    self.position = position;
+    
+    self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:radius];
+    self.physicsBody.dynamic = NO;
+    self.physicsBody.categoryBitMask = bonusHitCategory;
+    self.physicsBody.collisionBitMask = ball.physicsBody.categoryBitMask;
+    self.physicsBody.contactTestBitMask = ball.physicsBody.categoryBitMask;
+    
+    
+    self.moves = 0;
+    
+    _label = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
+    _label.fontColor = [UIColor whiteColor];
+    _label.fontSize = 18;
+    _label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    _label.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+    
+    [self addChild:_label];
+    
+    return self;
+}
+           
+-(BOOL)checkPosition:(CGPoint)position
+{
+    for (BonusNode *bonus in [BonusNode prevBonuses]) {
+        if ((powf(position.x - bonus.position.x, 2) + powf(position.y - bonus.position.y, 2)) < powf(radius * 2, 2))
+            return NO;
+    }
+    return YES;
+}
+
++(instancetype)bonusOfType:(NSInteger)type canCollideWtihBall:(SKShapeNode *)ball inScane:(SKScene *)scene
+{
+    BonusNode *bonus = [[self alloc] initBonusCanCollideWtihBall:ball inScane:scene];
+    
+    if (type == 1)
     {
-        label.text = @"✖︎2";
-        bonus.type = 1;
+        bonus.label.text = @"✖︎2";
+    }
+    if (type == 2)
+    {
+        bonus.label.text = @"⚡︎";
+        bonus.action = [SKAction sequence:@[[SKAction runBlock:^{ball.physicsBody.restitution *= 5.0; ball.fillColor = [UIColor redColor];}],
+                                            [SKAction waitForDuration:7 withRange:2],
+                                            [SKAction runBlock:^{ball.physicsBody.restitution /= 5.0; ball.fillColor = [UIColor whiteColor];}]]];
+        
+        [bonus runAction:[SKAction repeatAction:[SKAction sequence:@[[SKAction runBlock:^{bonus.fillColor = [UIColor redColor];}],
+                                                                     [SKAction waitForDuration:0.25],
+                                                                     [SKAction runBlock:^{bonus.fillColor = [UIColor blackColor];}],
+                                                                     [SKAction waitForDuration:0.25]]]
+                                          count:6]
+              completion:^{
+                  [bonus removeFromParent];
+              }
+         ];
     }
     
-    [bonus addChild:label];
-    
-    /*
-    SKSpriteNode *img;
-    NSString *img_name;
-    
-    switch (type) {
-        case 0:{
-            img_name = @"weight.png";
-            bonus.action = [SKAction runBlock:^{
-                ball.physicsBody.mass *=1.1;
-            }];
-            break;
-        }
-        case 1:{
-            img_name = @"feather.png";
-            bonus.action = [SKAction runBlock:^{
-                ball.physicsBody.mass /=1.1;
-            }];
-            break;
-        }
-        case 2:
-            img_name = @"big.png";
-            bonus.action = [SKAction scaleBy:1.1 duration:0.3];
-            break;
-        case 3:
-            img_name = @"small.png";
-            bonus.action = [SKAction scaleBy:1/1.1 duration:0.3];
-            break;
-        default:
-            break;
-    }
-    
-    img = [SKSpriteNode spriteNodeWithImageNamed:img_name];
-    img.size = CGSizeMake(radius , radius );
-     */
-    //[bonus addChild:img];
+    bonus.type = type;
     
     return bonus;
 }
 
-+(instancetype)bonusOfRandomTypeCanCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene
++(instancetype)bonusOfRandomMovesInRange:(NSInteger)maxMoves CanCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene
 {
-    int type = arc4random_uniform(bonus_count);
-    NSLog(@"%d", type);
-    return [self bonusOfType:type canCollideWtihBall:ball inScane:scene];
+    int moves = arc4random_uniform(maxMoves);
+
+    BonusNode *bonus = [[self alloc] initBonusCanCollideWtihBall:ball inScane:scene];
+    
+    bonus.moves = moves + 1;
+    bonus.label.text = [NSString stringWithFormat:@"%ld", bonus.moves];
+    bonus.type = 0;
+    
+    return bonus;
 }
+
++(NSMutableArray *)prevBonuses
+{
+    static NSMutableArray *prev = nil;
+    if (prev == nil)
+    {
+        prev = [[NSMutableArray alloc] init];
+    }
+    
+    return prev;
+}
+
+
 
 @end

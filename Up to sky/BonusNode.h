@@ -14,10 +14,12 @@ static const int bonusHitCategory = 4;
 
 @property (nonatomic) NSInteger type;
 @property (nonatomic) NSInteger moves;
+@property (nonatomic, strong) SKLabelNode *label;
 @property (nonatomic, strong) SKAction *action;
 
 +(instancetype)bonusOfType:(NSInteger)type canCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene;
-+(instancetype)bonusOfRandomTypeCanCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene;
++(instancetype)bonusOfRandomMovesInRange:(NSInteger)maxMoves CanCollideWtihBall:(SKNode *)ball inScane:(SKScene *)scene;
 
++(NSMutableArray *)prevBonuses;
 
 @end
